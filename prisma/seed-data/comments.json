@@ -1,0 +1,56 @@
+[
+    {
+        "id": "c1a0b6e0-5c1d-4b9a-8f1a-7b3f8a7e9c1d",
+        "content": "I've started working on this. Will update the status soon.",
+        "userId": "user1",
+        "taskId": "task1-a0b6-5c1d-4b9a-8f1a7b3f8a7e",
+        "createdAt": "2023-04-11T10:15:00.000Z",
+        "updatedAt": "2023-04-11T10:15:00.000Z",
+        "parentId": null
+    },
+    {
+        "id": "c2c3d4e5-6f7g-8h9i-0j1k-2l3m4n5o6p7q",
+        "content": "Have you checked the auth library I mentioned?",
+        "userId": "user2",
+        "taskId": "task1-a0b6-5c1d-4b9a-8f1a7b3f8a7e",
+        "createdAt": "2023-04-12T09:30:00.000Z",
+        "updatedAt": "2023-04-12T09:30:00.000Z",
+        "parentId": "c1a0b6e0-5c1d-4b9a-8f1a-7b3f8a7e9c1d"
+    },
+    {
+        "id": "c3d4e5f6-7g8h-9i0j-1k2l-3m4n5o6p7q8r",
+        "content": "Yes, I'm implementing it now. Thanks for the suggestion!",
+        "userId": "user1",
+        "taskId": "task1-a0b6-5c1d-4b9a-8f1a7b3f8a7e",
+        "createdAt": "2023-04-12T11:45:00.000Z",
+        "updatedAt": "2023-04-12T11:45:00.000Z",
+        "parentId": "c2c3d4e5-6f7g-8h9i-0j1k-2l3m4n5o6p7q"
+    },
+    {
+        "id": "c4e5f6g7-8h9i-0j1k-2l3m-4n5o6p7q8r9s",
+        "content": "The mockups look great! Just need minor adjustments to the color scheme.",
+        "userId": "user3",
+        "taskId": "task2-b1c7-6d2e-5f0b-9g2a8h4i9j5k",
+        "createdAt": "2023-04-20T14:00:00.000Z",
+        "updatedAt": "2023-04-20T14:00:00.000Z",
+        "parentId": null
+    },
+    {
+        "id": "c5f6g7h8-9i0j-1k2l-3m4n-5o6p7q8r9s0t",
+        "content": "I've identified the issue. It's related to the validation logic.",
+        "userId": "user4",
+        "taskId": "task3-c2d8-7e3f-6g1c-0h3b9i5j0k6l",
+        "createdAt": "2023-05-13T16:20:00.000Z",
+        "updatedAt": "2023-05-13T16:20:00.000Z",
+        "parentId": null
+    },
+    {
+        "id": "c6g7h8i9-0j1k-2l3m-4n5o-6p7q8r9s0t1u",
+        "content": "Don't forget to include strawberries on the grocery list.",
+        "userId": "user5",
+        "taskId": "task7-g6h2-1i7j-0k5g-4l7f3m9n4o0p",
+        "createdAt": "2023-05-19T08:10:00.000Z",
+        "updatedAt": "2023-05-19T08:10:00.000Z",
+        "parentId": null
+    }
+]

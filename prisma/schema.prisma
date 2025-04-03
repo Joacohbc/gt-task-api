@@ -1,15 +1,12 @@
-// This is your Prisma schema file,
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "sqlite" // Turso usa SQLite bajo el capó
+  provider = "sqlite"
   url      = "file:./dev.db"
 }
-
 enum TaskStatus {
   todo
   in_progress

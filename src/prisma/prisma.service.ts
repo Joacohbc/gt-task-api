@@ -9,15 +9,11 @@ import { ConfigService } from '@nestjs/config'; // Opcional: para mejor manejo d
 export class PrismaService
     extends PrismaClient
     implements OnModuleInit, OnModuleDestroy {
+
     constructor(
-        // Opcional: Inyectar ConfigService si usas @nestjs/config
         private readonly configService: ConfigService,
     ) {
-        // Obtener URL y Token desde las variables de entorno
-        // Si no usas ConfigService, usa process.env directamente:
-        // const databaseUrl = process.env.DATABASE_URL;
-        // const authToken = process.env.TURSO_AUTH_TOKEN;
-        const databaseUrl = configService.get<string>('DATABASE_URL');
+        const databaseUrl = configService.get<string>('TURSO_DATABASE_URL');
         const authToken = configService.get<string>('TURSO_AUTH_TOKEN');
 
         if (!databaseUrl || !authToken) {
@@ -26,13 +22,11 @@ export class PrismaService
             );
         }
 
-        // 1. Crear el cliente libSQL
         const libsql = createClient({
             url: databaseUrl,
             authToken: authToken,
         });
 
-        // 2. Crear el adaptador Prisma con el cliente libSQL
         const adapter = new PrismaLibSQL(libsql);
 
         // 3. Llamar al constructor de PrismaClient con el adaptador
@@ -40,17 +34,12 @@ export class PrismaService
     }
 
     async onModuleInit() {
-        // Prisma Client no necesita un connect explícito con el adaptador aquí,
-        // pero es un buen lugar si necesitas realizar alguna acción al iniciar.
-        // La conexión se maneja implícitamente por el adaptador.
-        console.log('Prisma Adapter connected successfully.');
-
-        // try {
-        //   await this.$queryRaw`SELECT 1`;
-        //   console.log('Database connection successful!');
-        // } catch (error) {
-        //   console.error('Failed to connect to the database:', error);
-        // }
+        try {
+            await this.$queryRaw`SELECT 1`;
+            console.log('Database connection successful!');
+        } catch (error) {
+            console.error('Failed to connect to the database:', error);
+        }
     }
 
     async onModuleDestroy() {

@@ -1,60 +1,96 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import { Task } from '../types';
+import { Task } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
+import { FindDetails, TaskWithRelations } from './types';
 
 @Injectable()
 export class TasksService {
-    private tasks: Task[] = [];
+    constructor(private prisma: PrismaService) {}
 
-    findAll(): Task[] {
-        return this.tasks;
+    async findAll(): Promise<Task[]> {
+        return this.prisma.task.findMany();
     }
 
-    findOne(id: string): Task {
-        const task = this.tasks.find(task => task.id === id);
+    async findOne(id: string, details: FindDetails): Promise<TaskWithRelations> {
+        const { includeComments, includeSubtasks, includeTags, includeBoard } = details;
+        const task = await this.prisma.task.findUnique({
+            where: { id },
+            include: {
+                comments: includeComments,
+                subtasks: includeSubtasks,
+                tags: includeTags,
+                board: includeBoard,
+            }
+        });
+
         if (!task) {
             throw new NotFoundException(`Task with ID ${id} not found`);
         }
-        return task;
-    }
 
-    findByBoard(boardId: string): Task[] {
-        return this.tasks.filter(task => task.boardId === boardId);
-    }
-
-    create(newTask: Task): Task {
-        this.tasks.push({
-            id: uuidv4(),
-            ...newTask,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            comments: [],
-            subtasks: [],
-        });
-        return newTask;
-    }
-
-    update(id: string, updatedTask: Task): Task {
-        const taskIndex = this.tasks.findIndex(task => task.id === id);
-        if (taskIndex === -1) {
-            throw new NotFoundException(`Task with ID ${id} not found`);
-        }
-
-        const task = this.tasks[taskIndex];
-        this.tasks[taskIndex] = {
-            ...task,
-            ...updatedTask,
-            updatedAt: new Date(),
+        const taskWithRelations: TaskWithRelations = {
+            task,
+            board: includeBoard ? task.board : undefined,
+            tags: includeTags ? task.tags : undefined,
+            comments: includeComments ? task.comments : undefined,
+            subtasks: includeSubtasks ? task.subtasks : undefined,
+            subtaskCount: includeSubtasks ? task.subtasks.length : undefined,
+            commentCount: includeComments ? task.comments.length : undefined,
+            tagCount: includeTags ? task.tags.length : undefined,
         };
-        return updatedTask;
+        
+        return taskWithRelations;
     }
 
-    remove(id: string): void {
-        const taskIndex = this.tasks.findIndex(task => task.id === id);
-        if (taskIndex === -1) {
-            throw new NotFoundException(`Task with ID ${id} not found`);
-        }
+    async findByBoard(boardId: string): Promise<Task[]> {
+        return this.prisma.task.findMany({
+            where: { boardId },
+            include: { comments: true, subtasks: true }
+        });
+    }
 
-        this.tasks.splice(taskIndex, 1);
+    async create(task: Task): Promise<Task> {
+        const {...taskData } = task;
+        
+        return this.prisma.task.create({
+            data: {
+                id: uuidv4(),
+                ...taskData,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            }
+        });
+    }
+
+    async update(id: string, task: Task): Promise<Task> {
+        try {
+            const { ...taskData } = task;
+            
+            return await this.prisma.task.update({
+                where: { id },
+                data: {
+                    ...taskData,
+                    updatedAt: new Date(),
+                }
+            });
+        } catch (error) {
+            if (error.code === 'P2025') {
+                throw new NotFoundException(`Task with ID ${id} not found`);
+            }
+            throw error;
+        }
+    }
+
+    async remove(id: string): Promise<void> {
+        try {
+            await this.prisma.task.delete({
+                where: { id },
+            });
+        } catch (error) {
+            if (error.code === 'P2025') {
+                throw new NotFoundException(`Task with ID ${id} not found`);
+            }
+            throw error;
+        }
     }
 }

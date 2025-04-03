@@ -1,0 +1,27 @@
+[
+    {
+        "id": "t1a0b6e0-5c1d-4b9a-8f1a-7b3f8a7e9c1d",
+        "name": "Frontend",
+        "color": "#61DAFB"
+    },
+    {
+        "id": "t2c3d4e5-6f7g-8h9i-0j1k-2l3m4n5o6p7q",
+        "name": "Backend",
+        "color": "#6DB33F"
+    },
+    {
+        "id": "t3d4e5f6-7g8h-9i0j-1k2l-3m4n5o6p7q8r",
+        "name": "Urgent",
+        "color": "#FF4136"
+    },
+    {
+        "id": "t4e5f6g7-8h9i-0j1k-2l3m-4n5o6p7q8r9s",
+        "name": "Feature",
+        "color": "#FFDC00"
+    },
+    {
+        "id": "t5f6g7h8-9i0j-1k2l-3m4n-5o6p7q8r9s0t",
+        "name": "Bug",
+        "color": "#FF851B"
+    }
+]
