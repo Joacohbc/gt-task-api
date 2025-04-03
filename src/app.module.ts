@@ -7,6 +7,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { BoardsModule } from './boards/boards.module';
 import { TagsModule } from './tags/tags.module';
 import { CommentsModule } from './comments/comments.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { CommentsModule } from './comments/comments.module';
     TasksModule,
     BoardsModule,
     TagsModule,
-    CommentsModule
+    CommentsModule,
+    ChatModule
   ],
   controllers: [AppController],
   providers: [AppService],
