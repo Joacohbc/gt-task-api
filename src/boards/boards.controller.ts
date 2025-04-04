@@ -20,8 +20,8 @@ export class BoardsController {
     }
 
     @Get()
-    async findAll(): Promise<Board[]> {
-        return this.boardsService.findAll();
+    async findAll(@Param('with_tasks') with_tasks): Promise<Board[]> {
+        return this.boardsService.findAll(with_tasks);
     }
 
     @Get(':id')

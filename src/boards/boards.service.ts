@@ -7,9 +7,9 @@ import { PrismaService } from '../prisma/prisma.service';
 export class BoardsService {
     constructor(private prisma: PrismaService) {}
 
-    async findAll(): Promise<Board[]> {
+    async findAll(with_tasks : boolean): Promise<Board[]> {
         return this.prisma.board.findMany({
-            include: { tasks: true }
+            include: { tasks: with_tasks }
         });
     }
 
