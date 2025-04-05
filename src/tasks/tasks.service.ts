@@ -1,9 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
+import { Injectable } from '@nestjs/common';
 import { Task } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindDetails, TaskWithRelations } from './types';
-import { RemoveId } from 'src/common/decorators/remove-id.decorator';
+import { RemoveAutoDates, RemoveId } from 'src/common/decorators/remove-fields.decorator';
 
 @Injectable()
 export class TasksService {
@@ -26,7 +25,7 @@ export class TasksService {
         });
 
         if (!task) {
-            throw new NotFoundException(`Task with ID ${id} not found`);
+            throw new Error(`Task with ID ${id} not found`);
         }
 
         const taskWithRelations: TaskWithRelations = {
@@ -51,19 +50,18 @@ export class TasksService {
     }
 
     @RemoveId({ processInputs: true })
+    @RemoveAutoDates({ processInputs: true })
     async create(task: Task): Promise<Task> {
         const {...taskData } = task;
         
         return this.prisma.task.create({
             data: {
                 ...taskData,
-                id: undefined,
-                createdAt: undefined,
-                updatedAt: undefined,
             }
         });
     }
 
+    @RemoveAutoDates({ processInputs: true })
     async update(id: string, task: Task): Promise<Task> {
         try {
             const { ...taskData } = task;
@@ -72,13 +70,9 @@ export class TasksService {
                 where: { id },
                 data: {
                     ...taskData,
-                    updatedAt: new Date(),
                 }
             });
         } catch (error) {
-            if (error.code === 'P2025') {
-                throw new NotFoundException(`Task with ID ${id} not found`);
-            }
             throw error;
         }
     }
@@ -89,9 +83,6 @@ export class TasksService {
                 where: { id },
             });
         } catch (error) {
-            if (error.code === 'P2025') {
-                throw new NotFoundException(`Task with ID ${id} not found`);
-            }
             throw error;
         }
     }

@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
 import { Comment } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { RemoveId } from 'src/common/decorators/remove-id.decorator';
+import { RemoveAutoDates, RemoveId } from 'src/common/decorators/remove-fields.decorator';
 
 @Injectable()
 export class CommentsService {
@@ -31,19 +30,18 @@ export class CommentsService {
     }
 
     @RemoveId({ processInputs: true })
+    @RemoveAutoDates({ processInputs: true })
     async create(comment: Comment): Promise<Comment> {
         const {...commentData } = comment;
         
         return this.prisma.comment.create({
             data: {
-                id: uuidv4(),
                 ...commentData,
-                createdAt: new Date(),
-                updatedAt: new Date(),
             }
         });
     }
 
+    @RemoveAutoDates({ processInputs: true })
     async update(id: string, comment: Comment): Promise<Comment> {
         try {
             const { ...commentData } = comment;
@@ -52,7 +50,6 @@ export class CommentsService {
                 where: { id },
                 data: {
                     ...commentData,
-                    updatedAt: new Date(),
                 }
             });
         } catch (error) {
