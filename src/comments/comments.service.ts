@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Comment } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { RemoveId } from 'src/common/decorators/remove-id.decorator';
 
 @Injectable()
 export class CommentsService {
@@ -29,6 +30,7 @@ export class CommentsService {
         });
     }
 
+    @RemoveId({ processInputs: true })
     async create(comment: Comment): Promise<Comment> {
         const {...commentData } = comment;
         

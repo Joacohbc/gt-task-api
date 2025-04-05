@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Board } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { RemoveId } from 'src/common/decorators/remove-id.decorator';
 
 @Injectable()
 export class BoardsService {
@@ -26,15 +27,14 @@ export class BoardsService {
         return board;
     }
 
+    @RemoveId({ processInputs: true })
     async create(board: Board): Promise<Board> {
         const {...boardData } = board;
         
         return this.prisma.board.create({
             data: {
-                id: uuidv4(),
                 ...boardData,
-                createdAt: new Date(),
-                updatedAt: new Date(),
+                id: undefined,
             }
         });
     }

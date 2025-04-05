@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Task } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindDetails, TaskWithRelations } from './types';
+import { RemoveId } from 'src/common/decorators/remove-id.decorator';
 
 @Injectable()
 export class TasksService {
@@ -49,15 +50,16 @@ export class TasksService {
         });
     }
 
+    @RemoveId({ processInputs: true })
     async create(task: Task): Promise<Task> {
         const {...taskData } = task;
         
         return this.prisma.task.create({
             data: {
-                id: uuidv4(),
                 ...taskData,
-                createdAt: new Date(),
-                updatedAt: new Date(),
+                id: undefined,
+                createdAt: undefined,
+                updatedAt: undefined,
             }
         });
     }

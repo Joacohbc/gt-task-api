@@ -16,8 +16,13 @@ export class TagsController {
     constructor(private readonly tagsService: TagsService) { }
 
     @Post()
-    async create(@Body() tag: Tag): Promise<Tag> {
-        return this.tagsService.create(tag);
+    async create(@Body() tagData: Tag | Tag[]): Promise<Tag | Tag[]> {
+        // Check if the input is an array
+        if (Array.isArray(tagData)) {
+            return this.tagsService.createMany(tagData);
+        }
+        // Handle single tag case
+        return this.tagsService.create(tagData);
     }
 
     @Get()

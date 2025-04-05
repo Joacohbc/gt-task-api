@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Tag } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { RemoveId } from 'src/common/decorators/remove-id.decorator';
 
 @Injectable()
 export class TagsService {
@@ -35,13 +36,17 @@ export class TagsService {
         });
     }
 
+    @RemoveId({ processInputs: true })
     async create(tag: Tag): Promise<Tag> {
-        const {...tagData } = tag;
-        
         return this.prisma.tag.create({
-            data: {
-                ...tagData
-            }
+            data: tag
+        });
+    }
+    
+    @RemoveId({ processInputs: true })
+    async createMany(tags: Tag[]): Promise<Tag[]> {
+        return this.prisma.tag.createManyAndReturn({
+            data: tags
         });
     }
 
