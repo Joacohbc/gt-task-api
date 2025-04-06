@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Task } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { FindDetails, TaskWithRelations } from './types';
+import { FindDetails, TaskFull, TaskWithRelations } from './types';
 import { RemoveAutoDates, RemoveFields, RemoveId } from 'src/common/decorators/remove-fields.decorator';
 
 @Injectable()
 export class TasksService {
     constructor(private prisma: PrismaService) {}
 
-    async findAll(): Promise<Task[]> {
+    async findAll(): Promise<TaskFull[]> {
         return this.prisma.task.findMany();
     }
 
@@ -26,7 +25,7 @@ export class TasksService {
         });
 
         if (!task) {
-            throw new Error(`Task with ID ${id} not found`);
+            throw new Error(`TaskFull with ID ${id} not found`);
         }
 
         const taskWithRelations: TaskWithRelations = {
@@ -35,11 +34,11 @@ export class TasksService {
             commentCount: includeComments ? task.comments.length : undefined,
             tagCount: includeTags ? task.tags.length : undefined,
         };
-        
+
         return taskWithRelations;
     }
 
-    async findByBoard(boardId: string): Promise<Task[]> {
+    async findByBoard(boardId: string): Promise<TaskFull[]> {
         return this.prisma.task.findMany({
             where: { boardId },
         });
@@ -47,10 +46,15 @@ export class TasksService {
 
     @RemoveId({ processInputs: true, processOutput: false })
     @RemoveAutoDates({ processInputs: true })
-    async create(task: Task, tagIds?: string[]): Promise<Task> {
+    async create(task: TaskFull, tagIds?: string[]): Promise<TaskFull> {
         return this.prisma.task.create({
             data: {
-                ...task,
+                title: task.title,
+                description: task.description,
+                status: task.status,
+                priority: task.priority,
+                dueDate: task.dueDate,
+                boardId: task.boardId,
                 tags: {
                     connect: tagIds?.map(tagId => ({ id: tagId })) || []
                 }
@@ -62,14 +66,22 @@ export class TasksService {
     }
 
     @RemoveAutoDates({ processInputs: true })
-    async update(id: string, task: Task): Promise<Task> {
+    async update(id: string, task: TaskFull): Promise<TaskFull> {
         try {
             const { ...taskData } = task;
-            
+
             return await this.prisma.task.update({
                 where: { id },
                 data: {
-                    ...taskData,
+                    title: taskData.title,
+                    description: taskData.description,
+                    status: taskData.status,
+                    priority: taskData.priority,
+                    dueDate: taskData.dueDate,
+                    boardId: taskData.boardId,
+                    tags: {
+                        set: taskData.tags?.map(tag => ({ id: tag.id })) || []
+                    }
                 }
             });
         } catch (error) {

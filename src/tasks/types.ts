@@ -21,3 +21,10 @@ export type TaskWithRelations = {
     commentCount?: number;
     tagCount?: number;
 };
+
+export type TaskFull = Task & {
+    tags?: Tag[];
+    comments?: Comment[];
+    subtasks?: Task[];
+    board?: Board;
+};
