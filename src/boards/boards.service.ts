@@ -26,7 +26,7 @@ export class BoardsService {
         return board;
     }
 
-    @RemoveId({ processInputs: true })
+    @RemoveId({ processInputs: true, processOutput: false })
     @RemoveAutoDates({ processInputs: true })
     async create(board: Board): Promise<Board> {
         const {...boardData } = board;

@@ -35,7 +35,7 @@ export class TagsService {
         });
     }
 
-    @RemoveId({ processInputs: true })
+    @RemoveId({ processInputs: true, processOutput: false })
     @RemoveAutoDates({ processInputs: true })
     async create(tag: Tag): Promise<Tag> {
         return this.prisma.tag.create({
@@ -43,11 +43,11 @@ export class TagsService {
         });
     }
     
-    @RemoveId({ processInputs: true })
+    @RemoveId({ processInputs: true, processOutput: false })
     @RemoveAutoDates({ processInputs: true })
     async createMany(tags: Tag[]): Promise<Tag[]> {
         return this.prisma.tag.createManyAndReturn({
-            data: tags
+            data: tags,
         });
     }
 

@@ -29,7 +29,7 @@ export class CommentsService {
         });
     }
 
-    @RemoveId({ processInputs: true })
+    @RemoveId({ processInputs: true, processOutput: false })
     @RemoveAutoDates({ processInputs: true })
     async create(comment: Comment): Promise<Comment> {
         const {...commentData } = comment;

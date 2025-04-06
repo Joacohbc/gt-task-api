@@ -49,7 +49,7 @@ export class TasksService {
         });
     }
 
-    @RemoveId({ processInputs: true })
+    @RemoveId({ processInputs: true, processOutput: false })
     @RemoveAutoDates({ processInputs: true })
     async create(task: Task, tagIds?: string[]): Promise<Task> {
         return this.prisma.task.create({
