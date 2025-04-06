@@ -9,7 +9,7 @@ export class BoardsService {
 
     async findAll(with_tasks : boolean): Promise<Board[]> {
         return this.prisma.board.findMany({
-            include: { tasks: with_tasks }
+            include: { tasks: Boolean(with_tasks) }
         });
     }
 

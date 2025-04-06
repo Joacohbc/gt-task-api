@@ -5,7 +5,8 @@ import {
     Body,
     Patch,
     Param,
-    Delete
+    Delete,
+    Query
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { Board } from '@prisma/client';
@@ -20,7 +21,7 @@ export class BoardsController {
     }
 
     @Get()
-    async findAll(@Param('with_tasks') with_tasks): Promise<Board[]> {
+    async findAll(@Query('with_tasks') with_tasks : boolean): Promise<Board[]> {
         return this.boardsService.findAll(with_tasks);
     }
 
