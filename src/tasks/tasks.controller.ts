@@ -38,15 +38,17 @@ export class TasksController {
         const includeSubtaskCount = details.includeSubtaskCount === 'true';
         const includeCommentCount = details.includeCommentCount === 'true';
         const includeTagCount = details.includeTagCount === 'true';
+        const includeParentTask = details.includeParentTask === 'true';
 
         return this.tasksService.findOne(id, {
             includeComments,
             includeSubtasks,
+            includeParentTask,
             includeTags,
             includeBoard,
             includeSubtaskCount,
             includeCommentCount,
-            includeTagCount
+            includeTagCount,
         });
     }
 

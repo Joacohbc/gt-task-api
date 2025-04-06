@@ -13,7 +13,7 @@ export class TasksService {
     }
 
     async findOne(id: string, details: FindDetails): Promise<TaskWithRelations> {
-        const { includeComments, includeSubtasks, includeTags, includeBoard } = details;
+        const { includeComments, includeSubtasks, includeTags, includeBoard, includeParentTask } = details;
         const task = await this.prisma.task.findUnique({
             where: { id },
             include: {
@@ -21,6 +21,7 @@ export class TasksService {
                 subtasks: includeSubtasks,
                 tags: includeTags,
                 board: includeBoard,
+                parentTask: includeParentTask,
             }
         });
 
@@ -30,10 +31,6 @@ export class TasksService {
 
         const taskWithRelations: TaskWithRelations = {
             task,
-            board: includeBoard ? task.board : undefined,
-            tags: includeTags ? task.tags : undefined,
-            comments: includeComments ? task.comments : undefined,
-            subtasks: includeSubtasks ? task.subtasks : undefined,
             subtaskCount: includeSubtasks ? task.subtasks.length : undefined,
             commentCount: includeComments ? task.comments.length : undefined,
             tagCount: includeTags ? task.tags.length : undefined,

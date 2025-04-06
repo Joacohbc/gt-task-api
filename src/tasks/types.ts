@@ -8,6 +8,7 @@ export type FindDetails = {
     includeSubtaskCount: boolean;
     includeCommentCount: boolean;
     includeTagCount: boolean;
+    includeParentTask: boolean;
 }
 
 export type TaskWithRelations = {
