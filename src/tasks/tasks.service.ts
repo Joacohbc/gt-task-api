@@ -42,7 +42,6 @@ export class TasksService {
     async findByBoard(boardId: string): Promise<Task[]> {
         return this.prisma.task.findMany({
             where: { boardId },
-            include: { comments: true, subtasks: true }
         });
     }
 
