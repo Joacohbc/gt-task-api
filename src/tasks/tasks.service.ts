@@ -79,6 +79,13 @@ export class TasksService {
                     priority: taskData.priority,
                     dueDate: taskData.dueDate,
                     boardId: taskData.boardId,
+                    parentId: taskData.parentId,
+                    subtasks: {
+                        set: taskData.subtasks?.map(subtask => ({ id: subtask.id })) || []
+                    },
+                    comments: {
+                        set: taskData.comments?.map(comment => ({ id: comment.id })) || []
+                    },
                     tags: {
                         set: taskData.tags?.map(tag => ({ id: tag.id })) || []
                     }
