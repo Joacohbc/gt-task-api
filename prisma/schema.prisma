@@ -42,7 +42,7 @@ model Tag {
 model Task {
   id          String       @id @default(uuid())
   title       String
-  description String
+  description String       @default("")
   status      TaskStatus   @default(todo)
   priority    TaskPriority @default(medium)
   board       Board        @relation(fields: [boardId], references: [id], onDelete: Cascade)
