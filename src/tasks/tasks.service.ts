@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Task } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindDetails, TaskWithRelations } from './types';
-import { RemoveAutoDates, RemoveId } from 'src/common/decorators/remove-fields.decorator';
+import { RemoveAutoDates, RemoveFields, RemoveId } from 'src/common/decorators/remove-fields.decorator';
 
 @Injectable()
 export class TasksService {
@@ -51,12 +51,16 @@ export class TasksService {
 
     @RemoveId({ processInputs: true })
     @RemoveAutoDates({ processInputs: true })
-    async create(task: Task): Promise<Task> {
-        const {...taskData } = task;
-        
+    async create(task: Task, tagIds?: string[]): Promise<Task> {
         return this.prisma.task.create({
             data: {
-                ...taskData,
+                ...task,
+                tags: {
+                    connect: tagIds?.map(tagId => ({ id: tagId })) || []
+                }
+            },
+            include: {
+                tags: true
             }
         });
     }

@@ -17,8 +17,8 @@ export class TasksController {
     constructor(private readonly tasksService: TasksService) { }
 
     @Post()
-    async create(@Body() task: Task): Promise<Task> {
-        return this.tasksService.create(task);
+    async create(@Body() data: TaskWithRelations): Promise<Task> {
+        return this.tasksService.create(data.task, data?.tags?.map(tag => tag.id) || []);
     }
 
     @Get()
