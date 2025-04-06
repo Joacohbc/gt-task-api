@@ -21,13 +21,13 @@ export class BoardsController {
     }
 
     @Get()
-    async findAll(@Query('with_tasks') with_tasks : boolean): Promise<Board[]> {
-        return this.boardsService.findAll(with_tasks);
+    async findAll(@Query('with_tasks') withTasks : boolean): Promise<Board[]> {
+        return this.boardsService.findAll(withTasks);
     }
 
     @Get(':id')
-    async findOne(@Param('id') id: string): Promise<Board> {
-        return this.boardsService.findOne(id);
+    async findOne(@Param('id') id: string, @Query('with_tasks') withTasks : boolean): Promise<Board> {
+        return this.boardsService.findOne(id, withTasks);
     }
 
     @Patch(':id')

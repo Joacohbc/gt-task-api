@@ -7,16 +7,16 @@ import { RemoveId, RemoveAutoDates } from 'src/common/decorators/remove-fields.d
 export class BoardsService {
     constructor(private prisma: PrismaService) {}
 
-    async findAll(with_tasks : boolean): Promise<Board[]> {
+    async findAll(withTasks : boolean): Promise<Board[]> {
         return this.prisma.board.findMany({
-            include: { tasks: Boolean(with_tasks) }
+            include: { tasks: Boolean(withTasks) }
         });
     }
 
-    async findOne(id: string): Promise<Board> {
+    async findOne(id: string, withTasks : boolean): Promise<Board> {
         const board = await this.prisma.board.findUnique({
             where: { id },
-            include: { tasks: true }
+            include: { tasks: Boolean(withTasks) }
         });
         
         if (!board) {
