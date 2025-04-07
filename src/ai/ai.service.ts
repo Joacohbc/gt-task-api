@@ -15,7 +15,7 @@ export interface AIProvider {
 export class GeminiProvider implements AIProvider {
     private readonly genAI: GoogleGenerativeAI;
     private readonly logger = new Logger(GeminiProvider.name);
-    private readonly MODEL = 'gemini-2.0-flash';
+    private readonly MODEL = 'gemini-2.0-flash-thinking-exp-01-21';
 
     constructor(private configService: ConfigService) {
         const apiKey = this.configService.get<string>('GEMINI_API_KEY') || 'NOT_FOUND';
