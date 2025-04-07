@@ -2,14 +2,19 @@
     "version": 2,
     "builds": [
         {
-            "src": "dist/src/main.js",
+            "src": "src/main.ts",
             "use": "@vercel/node"
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "dist/src/main.js",
+            "dest": "src/main.ts",
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
             "methods": [
                 "GET",
                 "POST",
